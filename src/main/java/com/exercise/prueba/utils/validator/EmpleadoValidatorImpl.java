@@ -1,4 +1,4 @@
-package com.exercise.prueba.validator;
+package com.exercise.prueba.utils.validator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
