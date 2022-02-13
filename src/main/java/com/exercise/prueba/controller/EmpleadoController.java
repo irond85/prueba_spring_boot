@@ -29,7 +29,7 @@ public class EmpleadoController {
 
 	@PostMapping()
 	public ResponseEntity<Object> guardarEmpleado(@RequestBody Empleado empleado) throws ApiUnprocessableEntity {
-		this.empleadoValidator.validator(empleado);
+		this.empleadoValidator.validarEmpleado(empleado);
 		empleadoService.guardarEmpleado(empleado);
 
 		return ResponseEntity.ok(Boolean.TRUE);

@@ -8,6 +8,6 @@ import com.exercise.prueba.utils.exceptions.ApiUnprocessableEntity;
 @Service
 public interface EmpleadoValidator {
 	
-	void validator(Empleado empleado) throws ApiUnprocessableEntity;
+	void validarEmpleado(Empleado empleado) throws ApiUnprocessableEntity;
 
 }

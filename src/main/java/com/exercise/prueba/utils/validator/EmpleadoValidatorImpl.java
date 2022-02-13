@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Locale;
 
 import org.springframework.stereotype.Component;
 
@@ -18,16 +17,14 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 
 	private Date fechaActualDate = new Date();
 	private LocalDate fechaActual = fechaActualDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	
-	
 
 	@Override
-	public void validator(Empleado empleado) throws ApiUnprocessableEntity {
+	public void validarEmpleado(Empleado empleado) throws ApiUnprocessableEntity {
 
-		Date fechaNacDate = empleado.getFecha_nacimiento();		
+		Date fechaNacDate = empleado.getFecha_nacimiento();
 		LocalDate fechaNacLocalDate = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		String fechaNacimiento = fechaNacLocalDate.toString();
-		
+
 		Date fechaVincDate = empleado.getFecha_vinculacion();
 		LocalDate fechaVincLocalDate = fechaVincDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		String fechaVinculacion = fechaVincLocalDate.toString();
@@ -67,7 +64,7 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 		if (empleado.getSalario() == null || empleado.getSalario().isNaN()) {
 			this.message("Ingresar el salario es obligatorio");
 		}
-		
+
 		if (!validarEdadEmpleado(empleado)) {
 			message("El usuario es menor de edad");
 		}
@@ -86,10 +83,10 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			return false;
 		}
 	}
-
-	private boolean isFechaValida(String fecha) {
+	
+	private Boolean isFechaValida(String fecha) {
 		try {
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 			formatoFecha.setLenient(false);
 			formatoFecha.parse(fecha);
 		} catch (ParseException e) {
