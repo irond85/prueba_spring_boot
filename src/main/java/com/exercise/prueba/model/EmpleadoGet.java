@@ -2,8 +2,6 @@ package com.exercise.prueba.model;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -20,13 +18,11 @@ public class EmpleadoGet {
 
 	private String num_documento;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_nacimiento;
 
 	private String edadActual;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_vinculacion;
 

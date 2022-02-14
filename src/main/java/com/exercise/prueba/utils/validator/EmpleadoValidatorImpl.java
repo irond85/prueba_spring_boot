@@ -45,7 +45,7 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			this.message("Ingresar el numero de documento es obligatorio");
 		}
 
-		if (fechaNacimiento == null || fechaNacimiento.isEmpty()) {
+		if (empleado.getFecha_nacimiento() == null) {
 			this.message("Ingresar la fecha de nacimiento es obligatoria");
 		}
 
@@ -57,6 +57,10 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			this.message("El formato de la fecha es incorrecto");
 		}
 
+		if (empleado.getFecha_nacimiento().after(empleado.getFecha_vinculacion())) {
+			this.message("La fecha de nacimiento debe ser anterior a la fecha de vinculación");
+		}
+
 		if (empleado.getCargo() == null || empleado.getCargo().isEmpty()) {
 			this.message("Ingresar el cargo es obligatorio");
 		}
@@ -65,13 +69,13 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			this.message("Ingresar el salario es obligatorio");
 		}
 
-		if (!validarEdadEmpleado(empleado)) {
-			message("El usuario es menor de edad");
+		if (!edadEmpleado(empleado)) {
+			this.message("El usuario es menor de edad");
 		}
 
 	}
 
-	public boolean validarEdadEmpleado(Empleado empleado) {
+	public boolean edadEmpleado(Empleado empleado) {
 		Date fechaNacDate = empleado.getFecha_nacimiento();
 		LocalDate fechaNac = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
@@ -83,7 +87,7 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			return false;
 		}
 	}
-	
+
 	private Boolean isFechaValida(String fecha) {
 		try {
 			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");

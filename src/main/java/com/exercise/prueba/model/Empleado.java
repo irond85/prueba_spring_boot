@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -32,12 +30,10 @@ public class Empleado implements Serializable {
 
 	private String num_documento;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-M-dd")
 	private Date fecha_nacimiento;
 
-	//@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd" )
+	@JsonFormat(pattern = "yyyy-M-dd" )
 	private Date fecha_vinculacion;
 
 	private String cargo;

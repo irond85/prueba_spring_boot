@@ -32,9 +32,9 @@ public class EmpleadoController {
 		this.empleadoValidator.validarEmpleado(empleado);
 		empleadoService.guardarEmpleado(empleado);
 
-		return ResponseEntity.ok(Boolean.TRUE);
+		return ResponseEntity.ok("Se ha ingresado el empleado");
 	}
-	
+
 	@GetMapping(produces = "application/json")
 	public List<EmpleadoGet> listarEmpleados() {
 		return empleadoService.obtenerEmpleados();
@@ -44,4 +44,5 @@ public class EmpleadoController {
 	public String eliminarEmpleado(@PathVariable Integer id) {
 		return empleadoService.eliminarEmpleadoById(id);
 	}
+		
 }
