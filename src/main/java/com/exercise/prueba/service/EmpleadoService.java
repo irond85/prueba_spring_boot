@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.cliftonlabs.json_simple.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,48 +29,39 @@ public class EmpleadoService {
 	public void guardarEmpleado(Empleado empleado) {
 		empleadoRepository.save(empleado);
 	}
-	
-	public String calcularTiempoVinculacion(Empleado empleado) {
-		Date fechaVincDate = empleado.getFecha_vinculacion();
-		LocalDate fechaVinc = fechaVincDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-		Period tiempoVinculacion = Period.between(fechaVinc, fechaActual);
+	public JsonObject obtenerEmpleado(Empleado empleado) {
+		Empleado res = empleadoRepository.findById(empleado.getIdEmpleado()).get();
+		return crearJson(res);
+	}
+	
+	public String calcularTiempoVinculado(Empleado empleado) {
+		LocalDate fechaVincDate = empleado.getFechaVinculacion();
+
+		Period tiempoVinculacion = Period.between(fechaVincDate, fechaActual);
 		return (String.format("Tiempo vinculado: %d Años, %d Meses y %d Días", tiempoVinculacion.getYears(),
 				tiempoVinculacion.getMonths(), tiempoVinculacion.getDays()));
 	}
 
 	public String calcularEdadActual(Empleado empleado) {
-		Date fechaNacDate = empleado.getFecha_nacimiento();
-		LocalDate fechaNac = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate fechaNacDate = empleado.getFechaNacimiento();
 
-		Period edadActual = Period.between(fechaNac, fechaActual);
+		Period edadActual = Period.between(fechaNacDate, fechaActual);
 		return (String.format("Edad del empleado: %d Años, %d Meses y %d Días", edadActual.getYears(),
 				edadActual.getMonths(), edadActual.getDays()));
 	}
 
 
-	public List<EmpleadoGet> obtenerEmpleados() {
-		
+	public List<JsonObject> obtenerEmpleados() {
 		List<Empleado> resultado = new ArrayList<Empleado>();
 		empleadoRepository.findAll().iterator().forEachRemaining(resultado::add);
 
-		List<EmpleadoGet> empleados = new ArrayList<EmpleadoGet>();
+		List<JsonObject> empleados = new ArrayList<JsonObject>();
 
 		for (Empleado empleado : resultado) {
-			EmpleadoGet empleadoGet = new EmpleadoGet();
-			empleadoGet.setId(empleado.getId());
-			empleadoGet.setNombres(empleado.getNombres());
-			empleadoGet.setApellidos(empleado.getApellidos());
-			empleadoGet.setTipo_documento(empleado.getTipo_documento());
-			empleadoGet.setNum_documento(empleado.getNum_documento());
-			empleadoGet.setFecha_nacimiento(empleado.getFecha_nacimiento());
-			empleadoGet.setEdadActual(calcularEdadActual(empleado));
-			empleadoGet.setFecha_vinculacion(empleado.getFecha_vinculacion());
-			empleadoGet.setTiempoVinculacion(calcularTiempoVinculacion(empleado));
-			empleadoGet.setCargo(empleado.getCargo());
-			empleadoGet.setSalario(empleado.getSalario());
-
-			empleados.add(empleadoGet);
+			JsonObject jsonEmp = new JsonObject();
+			jsonEmp = crearJson(empleado);
+			empleados.add(jsonEmp);
 		}
 
 		return empleados;
@@ -79,6 +73,25 @@ public class EmpleadoService {
 			return "Empleado eliminado correctamente.";
 		}
 		return "Error! El empleado no existe";
+	}
+
+	@JsonPropertyOrder({ "idEmpleado", "nombres", "apellidos", "tipoDocumento", "numDocumento", "fechaNacimiento", "edad",
+	"fechaVinculacion", "tiempoVinculado", "cargo", "salario" })
+	private JsonObject crearJson(Empleado empleado) {
+		JsonObject jsonEmpl = new JsonObject();
+		jsonEmpl.put("idEmpleado", empleado.getIdEmpleado());
+		jsonEmpl.put("nombres", empleado.getNombres());
+		jsonEmpl.put("apellidos", empleado.getApellidos());
+		jsonEmpl.put("tipoDocumento", empleado.getTipoDocumento());
+		jsonEmpl.put("numDocumento", empleado.getNumDocumento());
+		jsonEmpl.put("fechaNacimiento", empleado.getFechaNacimiento());
+		jsonEmpl.put("edad", calcularEdadActual(empleado));
+		jsonEmpl.put("fechaVinculacion", empleado.getFechaVinculacion());
+		jsonEmpl.put("tiempoVinculado", calcularTiempoVinculado(empleado));
+		jsonEmpl.put("cargo", empleado.getCargo());
+		jsonEmpl.put("salario", empleado.getSalario());
+
+		return jsonEmpl;
 	}
 
 }

@@ -21,13 +21,13 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 	@Override
 	public void validarEmpleado(Empleado empleado) throws ApiUnprocessableEntity {
 
-		Date fechaNacDate = empleado.getFecha_nacimiento();
-		LocalDate fechaNacLocalDate = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		String fechaNacimiento = fechaNacLocalDate.toString();
+		LocalDate fechaNacDate = empleado.getFechaNacimiento();
+		//LocalDate fechaNacLocalDate = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		String fechaNacimiento = fechaNacDate.toString();
 
-		Date fechaVincDate = empleado.getFecha_vinculacion();
-		LocalDate fechaVincLocalDate = fechaVincDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		String fechaVinculacion = fechaVincLocalDate.toString();
+		LocalDate fechaVincDate = empleado.getFechaVinculacion();
+		//LocalDate fechaVincLocalDate = fechaVincDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		String fechaVinculacion = fechaVincDate.toString();
 
 		if (empleado.getNombres() == null || empleado.getNombres().isEmpty()) {
 			this.message("Ingresar el nombre es obligatorio");
@@ -37,15 +37,15 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			this.message("Ingresar el apellido es obligatorio");
 		}
 
-		if (empleado.getTipo_documento() == null || empleado.getTipo_documento().isEmpty()) {
+		if (empleado.getTipoDocumento() == null || empleado.getTipoDocumento().isEmpty()) {
 			this.message("Ingresar el tipo de documento es obligatorio");
 		}
 
-		if (empleado.getNum_documento() == null || empleado.getNum_documento().isEmpty()) {
+		if (empleado.getNumDocumento() == null || empleado.getNumDocumento().isEmpty()) {
 			this.message("Ingresar el numero de documento es obligatorio");
 		}
 
-		if (empleado.getFecha_nacimiento() == null) {
+		if (empleado.getFechaNacimiento() == null) {
 			this.message("Ingresar la fecha de nacimiento es obligatoria");
 		}
 
@@ -57,7 +57,7 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 			this.message("El formato de la fecha es incorrecto");
 		}
 
-		if (empleado.getFecha_nacimiento().after(empleado.getFecha_vinculacion())) {
+		if (empleado.getFechaNacimiento().isAfter(empleado.getFechaVinculacion())) {
 			this.message("La fecha de nacimiento debe ser anterior a la fecha de vinculación");
 		}
 
@@ -76,30 +76,36 @@ public class EmpleadoValidatorImpl implements EmpleadoValidator {
 	}
 
 	public boolean edadEmpleado(Empleado empleado) {
-		Date fechaNacDate = empleado.getFecha_nacimiento();
-		LocalDate fechaNac = fechaNacDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate fechaNacDate = empleado.getFechaNacimiento();
 
-		Integer years = Period.between(fechaNac, fechaActual).getYears();
+		Integer years = Period.between(fechaNacDate, fechaActual).getYears();
 		if (years >= 18) {
 			return true;
-
 		} else {
 			return false;
 		}
 	}
 
 	private Boolean isFechaValida(String fecha) {
-		try {
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-			formatoFecha.setLenient(false);
-			formatoFecha.parse(fecha);
-		} catch (ParseException e) {
-			return false;
+		LocalDate localDate = LocalDate.parse(fecha);
+
+		int day = localDate.getDayOfMonth();
+		int month =  localDate.getMonthValue();
+
+		if (month <= 12) {
+			if (day > 31) {
+				return false;
+			}
+			return true;
 		}
+
+		System.out.println(day + " " + month);
+
 		return true;
 	}
 
-	private void message(String message) throws ApiUnprocessableEntity {
+	@Override
+	public void message(String message) throws ApiUnprocessableEntity {
 		throw new ApiUnprocessableEntity(message);
 	}
 

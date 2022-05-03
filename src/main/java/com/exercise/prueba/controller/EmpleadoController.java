@@ -2,6 +2,7 @@ package com.exercise.prueba.controller;
 
 import java.util.List;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,21 +29,28 @@ public class EmpleadoController {
 	private EmpleadoValidatorImpl empleadoValidator;
 
 	@PostMapping()
-	public ResponseEntity<Object> guardarEmpleado(@RequestBody Empleado empleado) throws ApiUnprocessableEntity {
+	public JsonObject guardarEmpleado(@RequestBody Empleado empleado) throws ApiUnprocessableEntity {
 		this.empleadoValidator.validarEmpleado(empleado);
 		empleadoService.guardarEmpleado(empleado);
-
-		return ResponseEntity.ok("Se ha ingresado el empleado");
+		return empleadoService.obtenerEmpleado(empleado);
 	}
 
+	/*
 	@GetMapping(produces = "application/json")
-	public List<EmpleadoGet> listarEmpleados() {
+	public Empleado mostrarEmpleado(Empleado empleado) {
+		return empleadoService.obtenerEmpleado(empleado);
+	}
+	 */
+
+
+	@GetMapping(produces = "application/json")
+	public List<JsonObject> listarEmpleados() {
 		return empleadoService.obtenerEmpleados();
 	}
 
-		@GetMapping(value = "/{id}")
+	@GetMapping(value = "delete/{id}")
 	public String eliminarEmpleado(@PathVariable Integer id) {
 		return empleadoService.eliminarEmpleadoById(id);
 	}
-		
+
 }
