@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.exercise.prueba.model.Empleado;
-import com.exercise.prueba.model.EmpleadoGet;
 import com.exercise.prueba.service.EmpleadoService;
 import com.exercise.prueba.utils.exceptions.ApiUnprocessableEntity;
 import com.exercise.prueba.utils.validator.EmpleadoValidatorImpl;

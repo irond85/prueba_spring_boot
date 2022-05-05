@@ -2,19 +2,15 @@ package com.exercise.prueba.service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.exercise.prueba.model.Empleado;
-import com.exercise.prueba.model.EmpleadoGet;
 import com.exercise.prueba.repository.EmpleadoRepository;
 
 @Service
@@ -23,8 +19,7 @@ public class EmpleadoService {
 	@Autowired
 	private EmpleadoRepository empleadoRepository;
 
-	private Date fechaActualDate = new Date();
-	private LocalDate fechaActual = fechaActualDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	private final LocalDate fechaActual = LocalDate.now();
 
 	public void guardarEmpleado(Empleado empleado) {
 		empleadoRepository.save(empleado);
@@ -39,6 +34,7 @@ public class EmpleadoService {
 		LocalDate fechaVincDate = empleado.getFechaVinculacion();
 
 		Period tiempoVinculacion = Period.between(fechaVincDate, fechaActual);
+
 		return (String.format("Tiempo vinculado: %d Años, %d Meses y %d Días", tiempoVinculacion.getYears(),
 				tiempoVinculacion.getMonths(), tiempoVinculacion.getDays()));
 	}
@@ -53,13 +49,13 @@ public class EmpleadoService {
 
 
 	public List<JsonObject> obtenerEmpleados() {
-		List<Empleado> resultado = new ArrayList<Empleado>();
+		List<Empleado> resultado = new ArrayList<>();
 		empleadoRepository.findAll().iterator().forEachRemaining(resultado::add);
 
-		List<JsonObject> empleados = new ArrayList<JsonObject>();
+		List<JsonObject> empleados = new ArrayList<>();
 
 		for (Empleado empleado : resultado) {
-			JsonObject jsonEmp = new JsonObject();
+			JsonObject jsonEmp;
 			jsonEmp = crearJson(empleado);
 			empleados.add(jsonEmp);
 		}

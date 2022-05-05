@@ -9,6 +9,7 @@ import com.exercise.prueba.utils.exceptions.ApiUnprocessableEntity;
 public interface EmpleadoValidator {
 	
 	void validarEmpleado(Empleado empleado) throws ApiUnprocessableEntity;
+	boolean validarEdadEmpleado(Empleado empleado);
 	void message(String mensaje) throws ApiUnprocessableEntity;
 
 }
