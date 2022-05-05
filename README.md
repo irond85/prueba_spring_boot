@@ -2,8 +2,7 @@
 Servicio Rest con Spring Boot con conexión a MySQL
 
 Descripción:
-Se crea servicio rest para obtener datos a ingresar por medio de JSON el cual es ingresado por medio del método POST y muestra los empleados e información adicional
-por medio de GET.
+Se crea servicio rest para obtener datos a ingresar por medio de JSON el cual es ingresado por medio del método POST y muestra el empleado e información adicional.
 
 Lombok, es usado para la automatización de métodos Setters, Getters y Constructores.
 
